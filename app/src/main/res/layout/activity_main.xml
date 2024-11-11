@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <!-- Add To-Do Button -->
+    <Button
+        android:id="@+id/btnAddToDo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Set a Reminder" />
+
+    <!-- ListView to display To-Do items -->
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:divider="@color/purple"
+        android:dividerHeight="15dp" />
+</LinearLayout>

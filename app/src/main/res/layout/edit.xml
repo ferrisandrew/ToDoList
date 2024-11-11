@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <!-- EditText for To-Do name -->
+    <EditText
+        android:id="@+id/etName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Task Name" />
+
+    <!-- DatePicker for selecting the To-Do date -->
+    <DatePicker
+        android:id="@+id/dpDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <!-- Save Button -->
+    <Button
+        android:id="@+id/btnSave"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Set Reminder" />
+</LinearLayout>
