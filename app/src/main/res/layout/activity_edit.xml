@@ -10,7 +10,7 @@
         android:id="@+id/Input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Task Name" />
+        android:hint="To Do Name" />
 
     <!-- DatePicker -->
     <DatePicker
@@ -23,5 +23,5 @@
         android:id="@+id/SaveButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Set Reminder" />
+        android:text="Set To Do" />
 </LinearLayout>

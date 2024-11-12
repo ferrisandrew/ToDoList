@@ -10,7 +10,7 @@
         android:id="@+id/AddItem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Set a Reminder" />
+        android:text="Set a Reminder To Do" />
 
     <!-- ListView to display To-Do items -->
     <ListView
@@ -19,4 +19,9 @@
         android:layout_height="wrap_content"
         android:divider="@color/purple"
         android:dividerHeight="15dp" />
+
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </LinearLayout>
