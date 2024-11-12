@@ -5,22 +5,22 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <!-- EditText for To-Do name -->
+    <!-- Text input -->
     <EditText
-        android:id="@+id/etName"
+        android:id="@+id/Input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Task Name" />
 
-    <!-- DatePicker for selecting the To-Do date -->
+    <!-- DatePicker -->
     <DatePicker
-        android:id="@+id/dpDate"
+        android:id="@+id/Date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <!-- Save Button -->
     <Button
-        android:id="@+id/btnSave"
+        android:id="@+id/SaveButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Set Reminder" />
