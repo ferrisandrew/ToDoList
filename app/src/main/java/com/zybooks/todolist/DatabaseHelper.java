@@ -1,5 +1,6 @@
 package com.zybooks.todolist;
 
+import android.app.LauncherActivity;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -32,6 +33,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_TODO);
+        onCreate(sqLiteDatabase);
+    }
+
+    public void insertItem(Item item) {
+
+    }
+
+    public void updateToDo(Item item) {
 
     }
 }
