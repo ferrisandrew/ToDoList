@@ -9,6 +9,7 @@ import android.widget.ListView;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import com.zybooks.todolist.DatabaseHelper;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -19,12 +20,14 @@ public class MainActivity extends AppCompatActivity {
 
     private ListView listView;
     private Button AddItem;
+    private DatabaseHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        dbHelper = new DatabaseHelper(this);
         listView = findViewById(R.id.listView);
         AddItem = findViewById(R.id.AddItem);
 
