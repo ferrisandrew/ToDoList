@@ -7,7 +7,7 @@
 
     <!-- Add To-Do Button -->
     <Button
-        android:id="@+id/AddItem"
+        android:id="@+id/addItemButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Set a Reminder To Do" />
