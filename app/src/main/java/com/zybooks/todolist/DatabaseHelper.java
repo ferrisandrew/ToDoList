@@ -67,22 +67,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.delete(TABLE_TODO, COLUMN_ID + "=?", new String[]{String.valueOf(itemId)});
     }
 
-    public ArrayList<ToDoItem> getAllItems() {
-        ArrayList<ToDoItem> list = new ArrayList<>();
+    public Cursor getAllItems() {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query(TABLE_TODO, null, null, null, null, null, null);
-        if (cursor != null) {
-            while (cursor.moveToNext()) {
-                list.add(new ToDoItem(
-                        cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID)),
-                        cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME)),
-                        cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DATE)),
-                        cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_COMPLETED)) == 1
-                ));
-            }
-            cursor.close();
-        }
-        return list;
+        return db.query(TABLE_TODO, null, null, null, null, null, COLUMN_DATE + " ASC");
     }
 
 }
