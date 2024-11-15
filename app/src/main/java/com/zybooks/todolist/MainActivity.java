@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        dbHelper = new DatabaseHelper(this);
+        dbHelper = new DatabaseHelper(this, ToDoDatabase, null, 1);
         listView = findViewById(R.id.listView);
         addItemButton = findViewById(R.id.addItemButton);
 
@@ -70,15 +70,15 @@ public class MainActivity extends AppCompatActivity {
     private void loadItems() {
         itemList.clear();
         itemIds.clear();
-        Cursor cursor = dbHelper.getAllItems();
+        Cursor cursor = DatabaseHelper.getAllItems();
         if (cursor.moveToFirst()) {
             do {
-                String name = cursor.getString(cursor.getColumnIndex("name"));
-                String date = cursor.getString(cursor.getColumnIndex("date"));
-                int completed = cursor.getInt(cursor.getColumnIndex("completed"));
+                String name = cursor.getString(cursor.getColumnIndexOrThrow("name"));
+                String date = cursor.getString(cursor.getColumnIndexOrThrow("date"));
+                int completed = cursor.getInt(cursor.getColumnIndexOrThrow("completed"));
                 String itemText = name + " - " + date + (completed == 1 ? " (Completed)" : "");
                 itemList.add(itemText);
-                itemIds.add(cursor.getInt(cursor.getColumnIndex("id")));
+                itemIds.add(cursor.getInt(cursor.getColumnIndexOrThrow("id")));
             } while (cursor.moveToNext());
         }
         cursor.close();
