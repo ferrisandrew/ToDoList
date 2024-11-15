@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        dbHelper = new DatabaseHelper(this, ToDoDatabase, null, 1);
+        dbHelper = new DatabaseHelper(this);
         listView = findViewById(R.id.listView);
         addItemButton = findViewById(R.id.addItemButton);
 
@@ -70,19 +70,20 @@ public class MainActivity extends AppCompatActivity {
     private void loadItems() {
         itemList.clear();
         itemIds.clear();
-        Cursor cursor = DatabaseHelper.getAllItems();
-        if (cursor.moveToFirst()) {
-            do {
-                String name = cursor.getString(cursor.getColumnIndexOrThrow("name"));
-                String date = cursor.getString(cursor.getColumnIndexOrThrow("date"));
-                int completed = cursor.getInt(cursor.getColumnIndexOrThrow("completed"));
-                String itemText = name + " - " + date + (completed == 1 ? " (Completed)" : "");
-                itemList.add(itemText);
-                itemIds.add(cursor.getInt(cursor.getColumnIndexOrThrow("id")));
-            } while (cursor.moveToNext());
+        Cursor cursor = (Cursor) dbHelper.getAllItems();
+        if (cursor != null) {
+            try {
+                while (cursor.moveToNext()) {
+                    String name = cursor.getString(cursor.getColumnIndexOrThrow("name"));
+                    String date = cursor.getString(cursor.getColumnIndexOrThrow("date"));
+                    int completed = cursor.getInt(cursor.getColumnIndexOrThrow("completed"));
+                    String itemText = name + " - " + date + (completed == 1 ? " (Completed)" : "");
+                    itemList.add(itemText);
+                    itemIds.add(cursor.getInt(cursor.getColumnIndexOrThrow("id")));
+                }
+            } finally {
+                cursor.close();
+            }
         }
-        cursor.close();
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, itemList);
-        listView.setAdapter(adapter);
     }
 }
