@@ -1,12 +1,14 @@
 package com.zybooks.todolist;
 
+import android.database.Cursor;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.zybooks.todolist.model.ToDoItem;
 
 public class EditActivity extends AppCompatActivity {
 
@@ -16,23 +18,71 @@ public class EditActivity extends AppCompatActivity {
     private DatabaseHelper dbHelper;
     private int ItemID = -1;
 
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
 
-        SaveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String name = Input.getText().toString();
-                String date = Date.getYear() + "-" + (Date.getMonth() + 1) + "-" + Date.getDayOfMonth();
+        Input = findViewById(R.id.Input);
+        Date = findViewById(R.id.Date);
+        SaveButton = findViewById(R.id.SaveButton);
+        dbHelper = new DatabaseHelper(this);
 
-                if (ItemID == -1) {
-                    dbHelper.insertItem(new ToDoItem(name, date, false));
-                } else {
-                    dbHelper.updateToDo(new ToDoItem(ItemID, name, date, false));
-                }
-                finish();
+        // Get the ItemID from the Intent
+        ItemID = getIntent().getIntExtra("ITEM_ID", -1);
+
+        if (ItemID != -1) {
+            loadItem();
+        }
+
+        SaveButton.setOnClickListener(v -> {
+            String name = Input.getText().toString();
+            String date = Date.getYear() + "-" + (Date.getMonth() + 1) + "-" + Date.getDayOfMonth();
+            boolean completed = false;
+
+            if (ItemID == -1) {
+                // Add a new item
+                dbHelper.insertItem(new ToDoItem(name, date, completed));
+            } else {
+                // Update an existing item
+                dbHelper.updateToDo(new ToDoItem(ItemID, name, date, completed));
             }
+
+            finish();
         });
+    }
+
+    private void loadItem() {
+        Cursor cursor = dbHelper.getAllItems();
+
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                int idIndex = cursor.getColumnIndex("id");
+                if (idIndex != -1) {
+                    int id = cursor.getInt(idIndex);
+                    if (id == ItemID) {
+                        int nameIndex = cursor.getColumnIndex("name");
+                        int dateIndex = cursor.getColumnIndex("date");
+
+                        if (nameIndex != -1 && dateIndex != -1) {
+                            String name = cursor.getString(nameIndex);
+                            String[] dateParts = cursor.getString(dateIndex).split("-");
+
+                            Input.setText(name);
+
+                            if (dateParts.length == 3) {
+                                int year = Integer.parseInt(dateParts[0]);
+                                int month = Integer.parseInt(dateParts[1]) - 1;
+                                int day = Integer.parseInt(dateParts[2]);
+
+                                Date.updateDate(year, month, day);
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+            cursor.close();
+        }
     }
 }

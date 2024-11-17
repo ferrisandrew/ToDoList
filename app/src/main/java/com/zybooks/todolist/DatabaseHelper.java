@@ -72,4 +72,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.query(TABLE_TODO, null, null, null, null, null, COLUMN_DATE + " ASC");
     }
 
+    public void markItemComplete(int itemId, boolean isCompleted) {
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_COMPLETED, isCompleted ? 1 : 0);
+        sqLiteDatabase.update(TABLE_TODO, values, COLUMN_ID + "=?", new String[]{String.valueOf(itemId)});
+    }
+
 }

@@ -1,16 +1,17 @@
 package com.zybooks.todolist;
+import com.zybooks.todolist.ToDoAdapter;
 
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.zybooks.todolist.model.ToDoItem;
 
 import java.util.ArrayList;
 
@@ -19,9 +20,8 @@ public class MainActivity extends AppCompatActivity {
     private ListView listView;
     private Button addItemButton;
     private DatabaseHelper dbHelper;
-    private ArrayAdapter<String> adapter;
-    private ArrayList<String> itemList;
-    private ArrayList<Integer> itemIds;
+    private ArrayList<ToDoItem> itemList;
+    private ToDoAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,57 +33,69 @@ public class MainActivity extends AppCompatActivity {
         addItemButton = findViewById(R.id.addItemButton);
 
         itemList = new ArrayList<>();
-        itemIds = new ArrayList<>();
 
+        // Set up the "Add Item" button
+        addItemButton.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, EditActivity.class);
+            // Open EditActivity for adding a new item
+            startActivity(intent);
+        });
+
+        // Set up ListView click listeners
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            ToDoItem selectedItem = itemList.get(position);
+            Intent intent = new Intent(MainActivity.this, EditActivity.class);
+            intent.putExtra("ITEM_ID", selectedItem.getId()); // Pass the item ID to EditActivity
+            startActivity(intent);
+        });
+
+        listView.setOnItemLongClickListener((parent, view, position, id) -> {
+            ToDoItem selectedItem = itemList.get(position);
+            dbHelper.deleteItem(selectedItem.getId());
+            loadItems(); // Refresh the list
+            Toast.makeText(MainActivity.this, "Item deleted", Toast.LENGTH_SHORT).show();
+            return true;
+        });
+
+        // Initial load of the list
         loadItems();
-
-        addItemButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, EditActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                int itemId = itemIds.get(position);
-                Intent intent = new Intent(MainActivity.this, EditActivity.class);
-                intent.putExtra("ITEM_ID", itemId);
-                startActivity(intent);
-            }
-        });
-
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                int itemId = itemIds.get(position);
-                dbHelper.deleteItem(itemId);
-                loadItems();
-                Toast.makeText(MainActivity.this, "Item deleted", Toast.LENGTH_SHORT).show();
-                return true;
-            }
-        });
     }
 
-    private void loadItems() {
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Reload the list when returning to MainActivity
+        loadItems();
+    }
+
+    public void loadItems() {
+        // Clear the current list
         itemList.clear();
-        itemIds.clear();
-        Cursor cursor = (Cursor) dbHelper.getAllItems();
+        Cursor cursor = dbHelper.getAllItems();
+
         if (cursor != null) {
             try {
                 while (cursor.moveToNext()) {
-                    String name = cursor.getString(cursor.getColumnIndexOrThrow("name"));
-                    String date = cursor.getString(cursor.getColumnIndexOrThrow("date"));
-                    int completed = cursor.getInt(cursor.getColumnIndexOrThrow("completed"));
-                    String itemText = name + " - " + date + (completed == 1 ? " (Completed)" : "");
-                    itemList.add(itemText);
-                    itemIds.add(cursor.getInt(cursor.getColumnIndexOrThrow("id")));
+                    int id = cursor.getInt(cursor.getColumnIndex("id"));
+                    String name = cursor.getString(cursor.getColumnIndex("name"));
+                    String date = cursor.getString(cursor.getColumnIndex("date"));
+                    boolean completed = cursor.getInt(cursor.getColumnIndex("completed")) == 1;
+
+                    itemList.add(new ToDoItem(id, name, date, completed));
                 }
             } finally {
                 cursor.close();
             }
         }
+
+        // Create the adapter and set it to the ListView
+        adapter = new ToDoAdapter(this, itemList, dbHelper);
+        listView.setAdapter(adapter);
     }
+    public void editItem(int itemId) {
+        Intent intent = new Intent(MainActivity.this, EditActivity.class);
+        intent.putExtra("ITEM_ID", itemId);
+        startActivity(intent);
+    }
+
 }
