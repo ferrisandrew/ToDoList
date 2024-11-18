@@ -14,20 +14,20 @@ import androidx.annotation.Nullable;
 import java.util.ArrayList;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
+    //declaring fields
     private static final String DATABASE_NAME = "todoList.db";
-
     private static final String TABLE_TODO = "todo";
     private static final String COLUMN_ID = "id";
     private static final String COLUMN_NAME = "name";
     private static final String COLUMN_DATE = "date";
     private static final String COLUMN_COMPLETED = "completed";
-
+    //database helper method
     public DatabaseHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, 1);
     }
 
     @Override
-    public void onCreate(SQLiteDatabase sqLiteDatabase) {
+    public void onCreate(SQLiteDatabase sqLiteDatabase) {//oncreate method for the database
         String createTable = "CREATE TABLE " + TABLE_TODO + " (" +
                 COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_NAME + " TEXT, " +
@@ -38,12 +38,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {//called when the database changes
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_TODO);
         onCreate(sqLiteDatabase);
     }
 
-    public void insertItem(ToDoItem item) {
+    public void insertItem(ToDoItem item) {//inserts an item into the database
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(COLUMN_NAME, item.getName());
@@ -52,7 +52,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.insert(TABLE_TODO, null, values);
     }
 
-    public void updateToDo(ToDoItem item) {
+    public void updateToDo(ToDoItem item) {//alters an existing item
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(COLUMN_NAME, item.getName());
@@ -62,17 +62,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    public void deleteItem(int itemId) {
+    public void deleteItem(int itemId) {//deletes an item from the database
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         sqLiteDatabase.delete(TABLE_TODO, COLUMN_ID + "=?", new String[]{String.valueOf(itemId)});
     }
 
-    public Cursor getAllItems() {
+    public Cursor getAllItems() {//gets all items from the database
         SQLiteDatabase db = this.getReadableDatabase();
         return db.query(TABLE_TODO, null, null, null, null, null, COLUMN_DATE + " ASC");
     }
 
-    public void markItemComplete(int itemId, boolean isCompleted) {
+    public void markItemComplete(int itemId, boolean isCompleted) {//marks an item as complete
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(COLUMN_COMPLETED, isCompleted ? 1 : 0);

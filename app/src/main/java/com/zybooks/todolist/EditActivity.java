@@ -22,7 +22,7 @@ public class EditActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
-
+        //variables
         Input = findViewById(R.id.Input);
         Date = findViewById(R.id.Date);
         SaveButton = findViewById(R.id.SaveButton);
@@ -34,7 +34,7 @@ public class EditActivity extends AppCompatActivity {
         if (ItemID != -1) {
             loadItem();
         }
-
+        //listener for the save button
         SaveButton.setOnClickListener(v -> {
             String name = Input.getText().toString();
             String date = Date.getYear() + "-" + (Date.getMonth() + 1) + "-" + Date.getDayOfMonth();
@@ -51,9 +51,9 @@ public class EditActivity extends AppCompatActivity {
             finish();
         });
     }
-
+    //load item method
     private void loadItem() {
-        Cursor cursor = dbHelper.getAllItems();
+        Cursor cursor = dbHelper.getAllItems();//loads all items
 
         if (cursor != null) {
             while (cursor.moveToNext()) {
@@ -68,14 +68,14 @@ public class EditActivity extends AppCompatActivity {
                             String name = cursor.getString(nameIndex);
                             String[] dateParts = cursor.getString(dateIndex).split("-");
 
-                            Input.setText(name);
+                            Input.setText(name);//sets the text as the text in the input box
 
-                            if (dateParts.length == 3) {
+                            if (dateParts.length == 3) {//gets the date as integers
                                 int year = Integer.parseInt(dateParts[0]);
                                 int month = Integer.parseInt(dateParts[1]) - 1;
                                 int day = Integer.parseInt(dateParts[2]);
 
-                                Date.updateDate(year, month, day);
+                                Date.updateDate(year, month, day);//sets the date from datepicker
                             }
                         }
                         break;

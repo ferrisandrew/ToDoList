@@ -24,18 +24,17 @@ public class MainActivity extends AppCompatActivity {
     private ToDoAdapter adapter;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {//oncreate method
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         dbHelper = new DatabaseHelper(this);
         listView = findViewById(R.id.listView);
         addItemButton = findViewById(R.id.addItemButton);
-
         itemList = new ArrayList<>();
 
         // Set up the "Add Item" button
-        addItemButton.setOnClickListener(v -> {
+        addItemButton.setOnClickListener(v -> {//setting the listener for the add item button
             Intent intent = new Intent(MainActivity.this, EditActivity.class);
             // Open EditActivity for adding a new item
             startActivity(intent);
@@ -92,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
         adapter = new ToDoAdapter(this, itemList, dbHelper);
         listView.setAdapter(adapter);
     }
-    public void editItem(int itemId) {
+    public void editItem(int itemId) {//allows an item to be modified
         Intent intent = new Intent(MainActivity.this, EditActivity.class);
         intent.putExtra("ITEM_ID", itemId);
         startActivity(intent);

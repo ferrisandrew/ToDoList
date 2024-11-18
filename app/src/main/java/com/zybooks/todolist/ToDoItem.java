@@ -1,18 +1,21 @@
 package com.zybooks.todolist.model;
 
+//todoitem class
 public class ToDoItem {
 
+//declaring variables
     private int id;
     private String name;
     private String date;
     private boolean completed;
 
+//creates an item without an id
     public ToDoItem(String name, String date, boolean completed) {
         this.name = name;
         this.date = date;
         this.completed = completed;
     }
-
+// creates an item with an id
     public ToDoItem(int id, String name, String date, boolean completed) {
         this.id = id;
         this.name = name;
