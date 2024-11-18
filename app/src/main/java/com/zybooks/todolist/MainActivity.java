@@ -17,6 +17,11 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+    //  Joseph Marvin & Andrew Weinert
+    //  ISYS 221 - VL1
+    //  Pair Programming Assignment #3 - To-Do List w/ Date Picker
+    //  Due: 11/17/2024
+
     private ListView listView;
     private Button addItemButton;
     private DatabaseHelper dbHelper;
